@@ -45,7 +45,11 @@ def network_handle():
     res = r.text
     j = json.loads(res)
     #print(res)
-    print j['result']
+    result = j['result']
+    print result
+    if result:
+	print "openGate"
+	control_io(7)
 
 def control_io(pin):
     GPIO.setmode(GPIO.BOARD)
