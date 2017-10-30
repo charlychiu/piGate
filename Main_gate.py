@@ -1,6 +1,7 @@
 import requests
 import json
 import time
+import RPi.GPIO as GPIO
 
 lastLine="" #Init
 countLine=0 #Init
@@ -23,7 +24,7 @@ def check_QRcatch():
 	global countLine
         if tmp > countLine:
 	    global lastLine
-	    global countLine
+	    #global countLine
 	    countLine = tmp
 	    lastLine = fp.readlines()[-1]
             string_handle()
@@ -46,7 +47,19 @@ def network_handle():
     #print(res)
     print j['result']
 
+def control_io(pin):
+    GPIO.setmode(GPIO.BOARD)
+    #GPIO.setmode(GPIO.BCM)
+    GPIO.setup(pin, GPIO.OUT)
+    GPIO.output(pin, GPIO.HIGH)     ## Turn on GPIO pin (HIGH)
+    time.sleep(1)                   ## Wait 1 second
+    GPIO.output(pin, GPIO.LOW)      ## Turn off GPIO pin (LOW)
+    time.sleep(1)                   ## Wait 1 second
+    GPIO.cleanup()                  ## Cleanup
+    
+
 init()
 while True:
+    #control_io(7)
     check_QRcatch()
     time.sleep(5)
