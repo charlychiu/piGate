@@ -1,6 +1,6 @@
 import requests
 import json
-
+import time
 
 lastLine = "" #Init
 countLine = 0 #Init
@@ -8,8 +8,17 @@ countLine = 0 #Init
 #lastLine = fp.readlines()[-1]   
 def init():
     with open('readQr.txt') as fp:
-    d=fp.readlines()
-    len(d)
+        d=fp.readlines()
+        countLine = len(d)
+
+def check_QRcatch():
+    with open('readQr.txt') as fp:
+        d=fp.readlines()
+        tmp = len(d)
+        if tmp > countLine:
+	    lastLine = fp.readlines()[-1]
+            string_handle()
+	    network_handle()
 
 def string_handle():
     lastLine = lastLine.strip()
@@ -25,3 +34,7 @@ def network_handle():
     #print(res)
     print j['result']
 
+init()
+while True:
+    check_QRcatch()
+    time.sleep(5)
