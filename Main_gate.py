@@ -2,31 +2,43 @@ import requests
 import json
 import time
 
-lastLine = "" #Init
-countLine = 0 #Init
+lastLine="" #Init
+countLine=0 #Init
+fileLocation='../readQr.txt'
 
 #lastLine = fp.readlines()[-1]   
 def init():
-    with open('readQr.txt') as fp:
+    with open(fileLocation) as fp:
         d=fp.readlines()
-        countLine = len(d)
+        global countLine
+	countLine = len(d)
+    fp.closed
 
 def check_QRcatch():
-    with open('readQr.txt') as fp:
+    with open(fileLocation) as fp:
         d=fp.readlines()
         tmp = len(d)
+    fp.closed
+    with open(fileLocation) as fp:
+	global countLine
         if tmp > countLine:
+	    global lastLine
+	    global countLine
+	    countLine = tmp
 	    lastLine = fp.readlines()[-1]
             string_handle()
 	    network_handle()
+    fp.closed
 
 def string_handle():
+    global lastLine
     lastLine = lastLine.strip()
     lastLine = lastLine.split(':')
     lastLine = lastLine[1]
     print lastLine
 
 def network_handle():
+    global lastLine
     r = requests.post('http://120.105.129.146/api/reqGate', data = {'qrcode_content':lastLine,'action':'in'})
     #res = r.json()
     res = r.text
