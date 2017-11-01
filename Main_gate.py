@@ -66,4 +66,4 @@ init()
 while True:
     #control_io(7)
     check_QRcatch()
-    time.sleep(5)
+    time.sleep(1)
